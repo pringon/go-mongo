@@ -1,0 +1,4 @@
+runtime: go113
+env_variables:
+  MONGO_USER: "<MONGO_USER>"
+  MONGO_PASSWORD: "<MONGO_PASSWORD>"

@@ -11,13 +11,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 type TodoDocument struct {
 	ID          primitive.ObjectID `json:"id" bson:"_id"`
-	Title       string             `json:"title" bson:"Title"`
-	Description string             `json:"description" bson:"Description"`
+	Title       string             `json:"title" bson:"title"`
+	Description string             `json:"description" bson:"description"`
 }
 
 type Todo struct {
@@ -202,7 +203,11 @@ func DeleteTodo(client *mongo.Collection) func(w http.ResponseWriter, r *http.Re
 }
 
 func main() {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	mongoUser := os.Getenv("MONGO_USER")
+	mongoPass := os.Getenv("MONGO_PASSWORD")
+	fmt.Println(mongoUser, mongoPass)
+	fmt.Println(fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", mongoUser, mongoPass))
+	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", mongoUser, mongoPass)))
 	if err != nil {
 		log.Fatal(err)
 	}
