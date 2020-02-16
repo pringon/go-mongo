@@ -162,8 +162,6 @@ func UpdateTodo(client *mongo.Collection) func(w http.ResponseWriter, r *http.Re
 		filter := bson.D{{"_id", todoItem.ID}}
 		update := bson.D{{"$set", todoDoc}}
 
-		fmt.Println(update)
-
 		_, err = client.UpdateOne(context.Background(), filter, update)
 		if err != nil {
 			log.Print(err)
@@ -205,8 +203,6 @@ func DeleteTodo(client *mongo.Collection) func(w http.ResponseWriter, r *http.Re
 func main() {
 	mongoUser := os.Getenv("MONGO_USER")
 	mongoPass := os.Getenv("MONGO_PASSWORD")
-	fmt.Println(mongoUser, mongoPass)
-	fmt.Println(fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", mongoUser, mongoPass))
 	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", mongoUser, mongoPass)))
 	if err != nil {
 		log.Fatal(err)
