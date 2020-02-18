@@ -1,0 +1,25 @@
+name: Go Mongo
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      
+      - name: Initialize Google Cloud SDK
+        uses: zxyle/publish-gae-action@f21469c3d0654cee8a62ae86efdd9d776d063ed2
+        with:
+          service_account_email: ${{ secrets.GCP_SA_EMAIL}}
+          service_account_key: ${{ secrets.GCP_SA_KEY}}
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Print Google Cloud SDK version
+        run: |
+          # This client-secret.json is converted by GCP_SA_KEY.
+          gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
+          gcloud info
