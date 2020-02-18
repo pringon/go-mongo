@@ -200,8 +200,8 @@ func DeleteTodo(client *mongo.Collection) func(w http.ResponseWriter, r *http.Re
 	}
 }
 
-function buildMongoURI(user string, password string) string {
-        return fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", mongoUser, mongoPass)
+func buildMongoURI(user string, password string) string {
+        return fmt.Sprintf("mongodb+srv://%s:%s@cluster0-eecpk.gcp.mongodb.net/test?retryWrites=true&w=majority", user, password)
 }
 
 func main() {
@@ -213,7 +213,7 @@ func main() {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-        if err := client.Connet(ctx); err != nil {
+        if err := client.Connect(ctx); err != nil {
 		log.Fatal(err)
 	}
 

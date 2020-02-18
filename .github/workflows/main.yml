@@ -23,3 +23,16 @@ jobs:
           # This client-secret.json is converted by GCP_SA_KEY.
           gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
           gcloud info
+
+      - name: Deploy API to Google App Engine
+        run: |
+          gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
+          gcloud config set project ${{ secrets.PROJECT_ID }}
+          sudo apt install google-cloud-sdk-app-engine-go -y
+
+          sed -i  's/<MONGO_USER>/'"${{ secrets.MONGO_USER }}"'/g' app.yaml
+          sed -i  's/<MONGO_PASSWORD>/'"${{ secrets.MONGO_PASSWORD }}"'/g' app.yaml
+          gcloud app deploy -q --promote
+          sed -i  's/'"${{ secrets.MONGO_USER }}"'/<MONGO_USER>/g' app.yaml
+          sed -i  's/'"${{ secrets.MONGO_PASSWORD }}"'/<MONGO_PASSWORD>/g' app.yaml
+            
